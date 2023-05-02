@@ -13,6 +13,11 @@
 
 -----
 
+#### 참고사항
+- 원활한 테스트를 위해서 SECRET_KEY 및 암호들에 대한 참조 파일 및 설정 파일을 첨부했습니다.
+- 구동 테스트 시 docker 및 docker-compose가 필요합니다.
+----
+
 #### 개발 프레임워크 및 DB
 
 - Backend : Django 4.1.1 + ninja library

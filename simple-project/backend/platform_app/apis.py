@@ -38,7 +38,7 @@ class ServerError(Schema) :
 '''
 # @router.post('/regi-item', auth=None, response={200: Success, 400: Error})
 # auth=None이 추가되는 경우 urls.py의 GlobalAuth()를 거치지 않는다. 
-@router.post('/regi-item', auth=None, response={200:Success, 201:Created, 400:Error, 500:ServerError})
+@router.post('/regi-item', response={200:Success, 201:Created, 400:Error, 500:ServerError})
 @transaction.atomic
 def regi_item(request) :
 
@@ -73,7 +73,7 @@ def regi_item(request) :
 '''
 ## 상품 정보 수정 API
 '''
-@router.patch('/fix-item', auth=None, response={200: Success, 400: Error})
+@router.patch('/fix-item', response={200: Success, 400: Error})
 @transaction.atomic
 def fix_info_item(request) :
 
@@ -142,7 +142,7 @@ def fix_info_item(request) :
 ## 본인이 등록한 상품의 등록 리스트 및 상세 정보 호출 API
 '''
 
-@router.get('/list-item', auth=None, response={200: Success, 400: Error})
+@router.get('/list-item', response={200: Success, 400: Error})
 def list_time(request, user_id:str, cursor:int=None) :
 
     ## Cursor 기반 페이지네이션을  구현하는데, 1페이지 기준 10개의 상품 구현 

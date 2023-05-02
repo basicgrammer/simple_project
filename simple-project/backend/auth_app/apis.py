@@ -72,7 +72,7 @@ def sign_in(request) :
 
 
 ## 로그아웃
-@router.post('/sign-out', auth=None, response={200: Success, 500: ServerError})
+@router.post('/sign-out', response={200: Success, 500: ServerError})
 @transaction.atomic
 def sign_out(request) :
 
