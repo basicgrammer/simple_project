@@ -1,0 +1,75 @@
+version : '3.9'
+
+services:
+
+        ## Nignx가 필요한 경우 신규 작성 및 활성화
+        # nginx:
+        #         build:
+        #               context: ./Dockerfiles
+        #               dockerfile: front.dev
+        #         container_name: 0.3_front_container
+        #         working_dir: /frontend/
+        #         entrypoint: ["sh", "entrypoint.sh"]
+        #         volumes:
+        #               - ./frontend:/frontend
+        #         ports:
+        #               - "80:80"
+        #         depends_on:
+        #               - backend
+          
+        backend:
+
+                build:
+                        context: ./Dockerfiles
+                        dockerfile: Dockerfile_django
+
+                container_name: backend_container
+
+                cpus: 2
+                mem_limit: 2048m
+
+                working_dir: /backend/
+
+                entrypoint: ["sh", "entrypoint.sh"]
+
+                volumes:
+                        - ./backend:/backend
+
+                ports: 
+                        - "80:80"
+                        
+                depends_on:
+                        - database
+
+        database:
+
+                build:
+                        context: ./Dockerfiles
+                        dockerfile: Dockerfile_mysql
+                        
+                container_name: database_container
+
+                cpus: 2
+                mem_limit: 1024m
+
+                expose:
+                        - "3306"
+                ports:
+                        - "3306:3306"
+                restart: always
+
+                environment:
+                        - MYSQL_ROOT_PASSWORD=jakr123
+                        - MYSQL_DATABASE=test_db
+                        - MYSQL_USER=test
+                        - MYSQL_PASSWORD=test123
+
+                volumes:
+                        - /etc/timezone:/etc/timezone:ro ## 호스트 OS와의 시간 동기화 
+                        - ./init-db/:/docker-entrypoint-initdb.d/
+                        - ./mysql/data:/var/lib/mysql
+                        - ./mysql/conf:/etc/mysql/conf.d
+
+networks:
+        default:
+                name: payhere-project-priv-network

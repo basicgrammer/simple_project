@@ -1,0 +1,10 @@
+Django==4.1.1
+django-ninja
+django-environ
+gunicorn
+mysqlclient
+requests
+bcrypt
+jamo
+django-ninja-jwt
+six
