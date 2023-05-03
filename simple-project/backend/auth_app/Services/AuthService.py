@@ -72,27 +72,35 @@ class AuthService :
     
     def sign_in_user(user_id:str, user_pw:str) -> "Response Code, Message" :
 
-        query_set = Profile.objects.get(user_id = user_id)        
+        query_set = Profile.objects.filter(user_id = user_id) 
 
-        pair_pw = query_set.user_pw
-        pair_pw = pair_pw.encode('utf-8')
+        if query_set.exists() :       
 
-        check_result = bcrypt.checkpw(user_pw.encode('utf-8'), pair_pw)
+            pair_pw = query_set[0].user_pw
+            pair_pw = pair_pw.encode('utf-8')
 
-        if check_result == True:
+            check_result = bcrypt.checkpw(user_pw.encode('utf-8'), pair_pw)
 
-            query_set.last_login = get_now_time()
-            query_set.save()
+            if check_result == True:
+
+                query_set[0].last_login = get_now_time()
+                query_set[0].save()
 
 
-            ## 정상 처리되는 경우, 200
-            message = "로그인 되었습니다 :)"
-            return 200, message
+                ## 정상 처리되는 경우, 200
+                message = "로그인 되었습니다 :)"
+                return 200, message
 
+            else :
+                ## 정상 처리되지 않는 경우, 400
+                message = "ID 또는 PW가 일치하지 않습니다."
+                return 400, message
         else :
+
             ## 정상 처리되지 않는 경우, 400
-            message = "ID 또는 PW가 일치하지 않습니다."
+            message = "해당하는 정보가 없습니다."
             return 400, message
+
 
     def sign_out_user(user_id:str)  -> "Response Code" :
 
@@ -199,8 +207,7 @@ class AuthService :
 
                 return res_code, message, token_data
 
-
-        except ValidationError :
+        except  :
             
             token_data = {
                 'refresh': None,
@@ -222,7 +229,7 @@ def duplicate_check(user_id:str) -> bool :
 
     ## Count > 0 보다는 쿼리가 존재하는지 자체를 반환 받는게 더 좋다.
     ## 해당 쿼리 결과가 존재한다고 나타나는 경우, 동일한 휴대폰번호로 중복되는 ID가 존재, False 반환
-    # 중복 존재 시 True, 존재하지 않는 경우 False
+    # 중복 존재 시 True, 존재하지 않는 경우 False 반환
 
     return query_set.exists()
 

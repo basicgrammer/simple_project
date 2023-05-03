@@ -45,7 +45,7 @@ class PlatService :
 
                 message = "상품이 성공적으로 등록되었습니다."
 
-                return 201, Message
+                return 201, message
 
         ## Parsing에 문제가 발생하는 경우
         except KeyError :
@@ -113,7 +113,7 @@ class PlatService :
 
         try : 
 
-            query_set = Product.objects.filter(p_regi_user = product_datat['user_id'], p_name = product_data['p_name'], p_barcode = product_data['barcode'], p_delete_check = False)
+            query_set = Product.objects.filter(p_regi_user = product_data['user_id'], p_name = product_data['p_name'], p_barcode = product_data['barcode'], p_delete_check = False)
 
             if query_set.exists() :
 
@@ -137,19 +137,17 @@ class PlatService :
     
     def get_item_list(user_id:str, cursor:int) -> "Response Code, Message, Item Data List" :
         
-        #1 ~ 10 1페이지
-        #11 ~ 20 2페이지 cursor = 1
-
-        if cursor != None or cursor != 1: 
-             
-            query_set = Product.objects.filter(profile_pk_id__gte = cursor, p_regi_user = user_id, p_delete_check = False).order_by('p_pk_id')[:10].values()
+        if cursor != None: 
+        
+            ## Cursor 값이 존재하므로, Cursor값부터 10개까지 슬라이스 처리를 통해 반환
+            query_set = Product.objects.filter(p_pk_id__gte = cursor, p_regi_user = user_id, p_delete_check = False).order_by('p_pk_id')[:10].values()
 
         else : 
 
+            ## Cursor 즉 마지막 값이 None인 경우 처음부터 10개까지 슬라이스 처리를 통해 반환
             query_set = Product.objects.filter(p_regi_user = user_id, p_delete_check = False).order_by('p_pk_id')[:10].values()
 
-
-        n_query_set = list(query_set)
+        n_query_set = list(query_set) ## 프론트 반환 시 파싱에 문제가 없도록 list로 묶음 처리
 
         if query_set.exists() :
             
@@ -169,11 +167,13 @@ class PlatService :
             ## 초성 변환 함수 ex) 슈크림 라떼 -> ㅅㅋㄹ ㄹㄸ
             keyword = create_keyword(product_name)
             
-            ## 상품 원본 이름 검색
+            ## 상품 원본 이름 검색 쿼리
             query_set = Product.objects.filter(p_regi_user = user_id, p_name__icontains = product_name, p_delete_check = False).values()
 
-            ## 상품 초성 이름 검색
+            ## 상품 초성 이름 검색 쿼리
             query_set2 = Product.objects.filter(p_regi_user = user_id, p_keyword__icontains = keyword, p_delete_check = False).values()
+
+            ## query_set 즉 원본 이름 검색에서 없는 경우, 초성 검색 결과를 확인해서 반환하는 구조
 
             if query_set.exists() :
                 n_query_set = list(query_set)    

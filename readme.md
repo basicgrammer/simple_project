@@ -237,7 +237,7 @@ six
 
 - 로그아웃 : /api/auth/sign-out
 
-  ```shell
+  ```python
   # HTTP Method : POST
   ## Autherization = Required (Bearer : Access Token)
   
@@ -298,7 +298,7 @@ six
 
 - 상품 등록 리스트 호출 : /api/plat/list-item
 
-  ```shell
+  ```python
   # HTTP Method : GET
   ## Autherization = Required (Bearer : Access Token)
   
@@ -314,7 +314,7 @@ six
 
 - 등록 상품 삭제 : /api/plat/remove-item
 
-  ```shell
+  ```python
   # HTTP Method : POST
   ## Autherization = Required (Bearer : Access Token)
   
@@ -345,7 +345,7 @@ six
 
 - Access Token 신규 발급 : /api/auth/get-new-token
 
-  ```shell
+  ```python
   # HTTP Method : POST
   ## Autherization = None
   
@@ -362,5 +362,20 @@ six
 #### 프로젝트 진행 시 아쉬웠던점
 
 - refresh 토큰 기반의 access 토큰 발급
-- 삭제 시 history 로직 부재
-- 
+  - 관련 사용법을 파악하지 못해서 급하게 기존 Refresh + Access Token 신규 발급하는 함수를 활용해서 임의로 구현함. 
+  - 해당 기능은 현재 반쪽짜리 기능으로, 차후 스터디를 통해 Refresh 토큰 유효성 체크 및 신규 Access 토큰을 발급하는 과정을 직접 구현하거나, 제공되는 기능을 활용해서 구현해야함
+  - JWT 발급 및 접근 권한 제어에는 현재 문제가 없기에, 시간을 두고 천천히 개선할 예정
+
+
+- 중복 로그인 처리를 위한 방법
+  - 타 프로젝트 진행 시 Session 기반 인증을 사용했으므로, 중복 로그인 방지에 대한 문제가 없었지만 JWT를 도입하게 되면서 마땅한 중복 로그인 처리 방법이 떠오르지 않음
+  - 그래서 이러한 중복 로그인 처리를 위해 서버 영역에서 JWT + Session 방식으로 운영하는것이 더 좋다고 판단됨
+  - 추후 시간이 된다면 JWT + Session 방식의 인증 구현 예정
+  - Session이 삭제되면서 발생되는 이벤트로 저장되는 Refresh Token의 유효성을 검증하는 방식으로 운영하면 좋을 것 같다.
+
+
+- 상품 삭제 시 history 관련 로직 및 테이블 부재
+- try + except 사용 
+
+- Swagger 활용 미숙
+  - Swagger를 활용한 api docs 운영 시 POST, PATCH 등을 GET처럼 파라미티 인자를 받는 형식으로 운영하지 못하고 있음, 학습을 통해 이 부분에 대한 개선이 필요함

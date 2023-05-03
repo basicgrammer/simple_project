@@ -11,7 +11,7 @@ router = Router()
 
 
 '''
-## API 응답값 설정
+## API 요청에 대한 응답값 설정 구간
 ## API의 응답값을 수정하려면 이곳에서 수정하시면 됩니다.
 '''
 
@@ -102,16 +102,8 @@ def fix_info_item(request) :
         "message": res_message
     }
 
-    ## 200으로 정상 반환되는 경우
-    if res_code == 200 :
+    return  res_code, {'meta': meta}
 
-        return 200, {"meta":meta}
-
-    ## 400으로 처리하는 경우
-
-    else :
-        
-        return 400, {"meta":meta}
 
 '''
 ## 상품 삭제 API
@@ -146,7 +138,10 @@ def fix_info_item(request) :
 def list_time(request, user_id:str, cursor:int=None) :
 
     ## Cursor 기반 페이지네이션을  구현하는데, 1페이지 기준 10개의 상품 구현 
-    # cursor값이 페이지 1,2,3 등을 의미하기 때문에 cusor 값은 Default가 1이 되며, 페이지 이동에 따라 값이 변동된다.
+    ## auto increment로 설정된 primary키를 활용해서 cursor based pagination을 구현함
+
+    print(user_id)
+    
 
     res_code, res_message, item_data = PlatService.get_item_list(user_id, cursor)
     
