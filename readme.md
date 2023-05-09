@@ -10,7 +10,7 @@
 
 - Lanugae 
 
-  ![python](https://img.shields.io/badge/python-3.9-red)
+  https://img.shields.io/badge/python-3.9-red
   
 
 
