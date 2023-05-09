@@ -72,4 +72,4 @@ services:
 
 networks:
         default:
-                name: payhere-project-priv-network
+                name: simple-project-priv-network
