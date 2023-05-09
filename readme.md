@@ -2,6 +2,19 @@
 
 -----
 
+### 프로젝트 설명
+
+
+
+### 프로젝트 사용 기술
+
+- Lanugae 
+
+  ![python](https://img.shields.io/badge/python-3.9-red)
+  
+
+
+
 #### 개발 사양
 
 - OS : Ubuntu 22.04 LTS
