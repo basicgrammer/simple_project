@@ -3,7 +3,7 @@ from ninja import Router, Schema
 from .Services.PlatService import *
 from django.db import transaction
 from django.core import serializers
-
+from datetime import date
 import json
 
 router = Router()
@@ -11,9 +11,10 @@ router = Router()
 
 
 '''
-## API 요청에 대한 응답값 설정 구간
+## API 반환 정보 설정
 ## API의 응답값을 수정하려면 이곳에서 수정하시면 됩니다.
 '''
+
 
 ## Code 200
 class Success(Schema) :
@@ -31,6 +32,23 @@ class Error(Schema) :
 class ServerError(Schema) :
     meta: dict
 
+'''
+## API 입력 템플릿 수정
+## Swagger에서 입력값 예시에 해당하는 값을 여기서 등록합니다.
+'''
+
+
+class RegiItem(Schema) :
+
+    userid : str
+    category : str
+    price : int
+    cost : int
+    p_name : str
+    describe : str
+    barcode : str
+    expire_date : date
+    size : str
 
 
 '''
@@ -40,12 +58,11 @@ class ServerError(Schema) :
 # auth=None이 추가되는 경우 urls.py의 GlobalAuth()를 거치지 않는다. 
 @router.post('/regi-item', response={200:Success, 201:Created, 400:Error, 500:ServerError})
 @transaction.atomic
-def regi_item(request) :
+def regi_item(request, data : RegiItem) :
 
-    product_data = json.loads(request.body)
 
     '''
-    -> product_data 명세 
+    -> 입력 데이터 명세 
     # user_id = product_data['user_id'] | str
     # category = product_data['p_category'] | str
     # price = product_data['p_price'] | integer
@@ -58,7 +75,7 @@ def regi_item(request) :
     '''
 
     ## 데이터베이스에 관련된 로직을 다루는 컨트롤러(/Services/*Services.py) 영역에 접근함
-    res_code, res_massage = PlatService.insert_item_data(product_data)
+    res_code, res_massage = PlatService.insert_item_data(data.dict())
 
     ## 컨트롤러 영역에서 반환된 정보를 토대로 응답을 설정함
     meta = {
@@ -110,7 +127,7 @@ def fix_info_item(request) :
 '''
 @router.patch('/remove-item', response={200: Success, 400: Error})
 @transaction.atomic
-def fix_info_item(request) :
+def delete_info_item(request) :
 
     product_data = json.loads(request.body)
     

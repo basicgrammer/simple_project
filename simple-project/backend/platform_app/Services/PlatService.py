@@ -27,15 +27,15 @@ class PlatService :
                 # Product 테이블 생성을 위해서 매핑 수행
 
                 query_set = Product()
-                query_set.p_regi_user = product_data['user_id']
-                query_set.p_category = product_data['p_category']
-                query_set.p_price = product_data['p_price']
-                query_set.p_cost = product_data['p_cost']
+                query_set.p_regi_user = product_data['userid']
+                query_set.p_category = product_data['category']
+                query_set.p_price = product_data['price']
+                query_set.p_cost = product_data['cost']
                 query_set.p_name = product_data['p_name']
-                query_set.p_subscription = product_data['p_describe']
-                query_set.p_barcode = product_data['p_barcode']
-                query_set.p_expire_date = product_data['p_expire_date']
-                query_set.p_size = product_data['p_size']
+                query_set.p_subscription = product_data['describe']
+                query_set.p_barcode = product_data['barcode']
+                query_set.p_expire_date = product_data['expire_date']
+                query_set.p_size = product_data['size']
                 query_set.p_keyword = name_jamo
 
                 query_set.save()

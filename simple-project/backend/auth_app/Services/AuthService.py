@@ -12,13 +12,14 @@ class AuthService :
     @transaction.atomic
     def insert_user_data(user_data:dict) -> "Response Code":
 
-
-        try : 
         
-            # request 타고 들어온 데이터를 파싱 처리함
-            user_phone = user_data['phone_num']
-            pw_check = user_data['pw_check']
-            pw_check_pair = user_data['pw_check2']
+        try : 
+    
+            user_phone = user_data['user']
+            pw_check = user_data['userpw']
+            pw_check_pair = user_data['userpw2']
+
+            # print(user_phone)
 
             ## 휴대폰 번호 저장 필드에서는 - 를 제거하고 저장하는 것이 검색 등의 여러 방법을 고려할때 좋은 방법 생각함
             convert_phone_num = user_phone.replace("-", "")
@@ -62,7 +63,7 @@ class AuthService :
                 message = "입력된 암호가 일치하지 않습니다."
                 return 400, message
 
-        except KeyError :
+        except :
 
             message = "서비스에 오류가 발생했습니다."
             return 500, message
