@@ -10,6 +10,9 @@ from ninja.errors import HttpError
 '''
 ## JWT 인증 관리 구역, Bearer을 통해 통과되는 경우에만 해당 API 응답을 받을 수 있다.
 '''
+
+
+
 class GlobalAUth(HttpBearer) :
 
     def authenticate(self, request, token) :
@@ -22,12 +25,14 @@ class GlobalAUth(HttpBearer) :
             if access == "authuser" :
                 return access
 
+            raise InvalidToken
+
         ## Access Token을 재발급 받는 2가지 방식 중 하나를 선택해야함
         ## 1. 요청마다 Access Token과 Refresh Token을 같이 넘기는 방법
         ## 2. 재발급 API를 만들어서 서버에서 Access Token이 만료되었다고 응답 시 Refresh Token으로 요청하여 재발급 받는 방법
         ## 여기서는 2번 과정으로 만들어야한다고 판단됨
 
-        except jwt.ExpiredSignatureError as e:
+        except jwt.ExpiredSignatureError :
 
             messages = "JWT 토큰 만료, 신규 발급 필요"
 
@@ -38,7 +43,6 @@ class GlobalAUth(HttpBearer) :
             }
 
             raise HttpError(401, meta)
-
 
 '''
 ## API 라우터 등록 및 URL 관리 영역

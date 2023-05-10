@@ -14,10 +14,13 @@ class AuthService :
 
         
         try : 
+            # print(user_data)
     
-            user_phone = user_data['user']
+            user_phone = user_data['userid']
             pw_check = user_data['userpw']
             pw_check_pair = user_data['userpw2']
+
+            # print("--check")
 
             # print(user_phone)
 

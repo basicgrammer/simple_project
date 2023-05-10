@@ -34,7 +34,7 @@ class PlatService :
                 query_set.p_name = product_data['p_name']
                 query_set.p_subscription = product_data['describe']
                 query_set.p_barcode = product_data['barcode']
-                query_set.p_expire_date = product_data['expire_date']
+                query_set.p_expire_date = product_data['expire_date'].strftime('%Y-%m-%d')
                 query_set.p_size = product_data['size']
                 query_set.p_keyword = name_jamo
 
@@ -56,7 +56,7 @@ class PlatService :
 
     def fix_item_data(json_data:dict) -> "Response Code, Message" :
 
-        p_query_set = Product.objects.filter(p_regi_user = json_data['user_id'], p_name = json_data['p_name'], p_delete_check = False) 
+        p_query_set = Product.objects.filter(p_regi_user = json_data['userid'], p_name = json_data['p_name'], p_delete_check = False) 
 
         ## .get()으로 데이터를 가져오는 경우 데이터가 없을 때 에러가 발생하기 때문에 filter로 데이터를 반환 받음
         ## query_set이 존재하는 경우에만 수정된 정보의 업데이트가 가능하므로 아래 로직 수행
@@ -69,25 +69,25 @@ class PlatService :
                 update_query_set.p_name = json_data['p_name']
 
             if json_data.get('p_category') != None :
-                update_query_set.p_category = json_data['p_category']
+                update_query_set.p_category = json_data['category']
             
             if json_data.get('p_price') != None :
-                update_query_set.p_price = json_data['p_price']
+                update_query_set.p_price = json_data['price']
 
             if json_data.get('p_cost') != None :
-                update_query_set.p_cost = json_data['p_cost']
+                update_query_set.p_cost = json_data['cost']
             
             if json_data.get('p_describe') != None :
-                update_query_set.p_subscription = json_data['p_describe']
+                update_query_set.p_subscription = json_data['describe']
 
             if json_data.get('p_barcode') != None :
-                update_query_set.p_barcode = json_data['p_barcode']
+                update_query_set.p_barcode = json_data['barcode']
 
             if json_data.get('p_expire_date') != None :
-                update_query_set.p_expire_date = json_data['p_expire_date']
+                update_query_set.p_expire_date = json_data['expire_date']
             
             if json_data.get('p_size') != None :
-                update_query_set.p_size = json_data['p_size']
+                update_query_set.p_size = json_data['size']
 
             now = timezone.now()
             date = now.strftime('%Y-%m-%d %H:%M:%S')
