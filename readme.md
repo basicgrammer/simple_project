@@ -25,17 +25,14 @@
 - Deploy
 
   ![On-Premise](https://img.shields.io/badge/On--Premise-Infra-blue)</br>
-  ![Docker](https://img.shields.io/badge/Docker-Container-brightgreen)
-  ![docker-compose](https://img.shields.io/badge/docker--compose-Orchestra%20Tool-orange)
-  ![Gunicorn](https://img.shields.io/badge/Gunicorn-App%20Server-red)
-
-- ETC
-
+  ![Docker](https://img.shields.io/badge/Docker-Container-brightgreen)</br>
+  ![docker-compose](https://img.shields.io/badge/docker--compose-Orchestra%20Tool-orange)</br>
+  ![Gunicorn](https://img.shields.io/badge/Gunicorn-App%20Server-red)</br>
 
 
 #### 개발 사양
 
-- OS : Ubuntu 22.04 LTS
+- OS : Ubuntu 22.04 LTS (XenServer 가상화 기반 VM)
 - CPU : vCPU 4
 - Memory : 8G
 - Disk : 250G
@@ -45,46 +42,47 @@
 -----
 
 #### 참고사항
-- 원활한 테스트를 위해서 SECRET_KEY 및 암호들에 대한 참조 파일 및 설정 파일을 첨부했습니다.
-- 구동 테스트 시 docker 및 docker-compose가 필요합니다.
+
+- 원활한 테스트를 위해서 Django SECRET_KEY 및 각종 설정들에 대한 참조 파일을 함께 업로드했습니다..
+- 구동 테스트 시 docker 및 docker-compose가 필요합니다. / OS 및 환경은 관계 없습니다.
 ----
 
 #### 컨테이너 기동
 
 ```shell
-# docker-compose.yml 파일이 있는 위치에서 해당 명령을 실행할 것
+# docker-compose.yml 명세를 활용할 수 있는 디렉토리 위치에서 아래 명령을 실행해주세요.
 
-# 신규 이미지 생성을 하지 않고 빌드하는 경우
+# 명세 기반 다중 컨테이너의 빌드 및 백그라운드 구동
 $ sudo docker-compose up --build -d
 
-# 신규 이미지 생성 + 빌드하는 경우
+# 명세 기반 다중 컨테이너의 이미지 신규 빌드 및 백그라운드 구동
 $ sudo docker-compose up --build -d --force-recreate
 ```
 
 #### 컨테이너 기동 중지 및 일시 정지
 
 ```shell
-# docker-compose.yml에 명시된 모든 컨테이너의 기동을 중단 하는 경우
+# 명세 기반 다중 컨테이너 정지
 $ sudo docker-compose down
 
-# 일정 컨테이너만을 일시 정지하는 경우
+# 일부 컨테이너 일시 정지
 $ sudo docker-compose stop {container_name}
 ```
 
 #### 컨테이너 로그 확인
 
 ```shell
-# 로그 기록 모니터링
+# 컨테이너 로그 모니터링
 $ sudo docker logs {container_name}
 
-# 지속적인 로그 기록 모니터링
+# 컨테이너 지속적인 로그 모니터링
 $ sudo docker logs --tail 1000 -f {container_name}
 ```
 
-#### 컨테이너 내부 접속
+#### 컨테이너 환경 접속
 
 ```shell
-# django
+# django 
 $ sudo docker exec -it {container_name} /bin/bash
 
 # mysql
@@ -97,7 +95,7 @@ $ sudo docker exec -it {container_name} /bin/bash
 $ sudo docker-compose config
 ```
 
-#### 컨테이너 자원 활용 모니터링ß
+#### 컨테이너 자원 활용 모니터링
 
 ```shell
 $ sudo docker stats
