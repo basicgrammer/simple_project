@@ -47,19 +47,21 @@
 
 #### 개발 사양
 
+```text
 - OS : Ubuntu 22.04 LTS (XenServer 가상화 기반 VM)
 - CPU : vCPU 4
 - Memory : 8G
 - Disk : 250G
 - docker engine version : Docker version 23.0.3, build 3e7cbfd
 - docker-compose version : Docker Compose version v2.13.0
-
+```
 -----
 
 #### 참고사항
-
+```text
 - 원활한 테스트를 위해서 Django SECRET_KEY 및 각종 설정들에 대한 참조 파일을 함께 업로드했습니다..
 - 구동 테스트 시 docker 및 docker-compose가 필요합니다. / OS 및 환경은 관계 없습니다.
+```
 ----
 
 #### 컨테이너 기동
