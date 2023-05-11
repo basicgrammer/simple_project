@@ -10,7 +10,26 @@
 
 - Lanugae 
 
-  https://img.shields.io/badge/python-3.9-red
+  ![python](https://img.shields.io/badge/python-3.9-red)
+
+- Framework
+
+  ![Django-ninja](https://img.shields.io/badge/Django--ninja-Django%20%2B%20FastAPI-lightgrey)
+
+
+- Dataase
+
+  ![MySQL](https://img.shields.io/badge/MySQL-Database-yellow)
+
+
+- Deploy
+
+  ![On-Premise](https://img.shields.io/badge/On--Premise-Infra-blue)
+  ![Docker](https://img.shields.io/badge/Docker-Container-brightgreen)
+  ![docker-compose](https://img.shields.io/badge/docker--compose-Orchestra%20Tool-orange)
+  ![Gunicorn](https://img.shields.io/badge/Gunicorn-App%20Server-red)
+
+- ETC
 
 
 
@@ -29,26 +48,6 @@
 - 원활한 테스트를 위해서 SECRET_KEY 및 암호들에 대한 참조 파일 및 설정 파일을 첨부했습니다.
 - 구동 테스트 시 docker 및 docker-compose가 필요합니다.
 ----
-
-#### 개발 프레임워크 및 DB
-
-- Backend : Django 4.1.1 + ninja library
-- Database : Mysql 5.7
-
------
-
-#### API Docs (Swagger)
-
-- http://{url}/api/docs
-
-----
-
-#### Port Mapping
-
-- 80 (django)  [ 개발 환경 : runserver | 프로덕션 환경 : Gunicorn ]
-- 3306(mysql)
-
------
 
 #### 컨테이너 기동
 
