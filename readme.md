@@ -403,8 +403,8 @@ six
 - 상품 삭제 시 history 관련 로직 및 테이블 부재
 - try + except 사용 
 
-- Swagger 활용 미숙
-  - Swagger를 활용한 api docs 운영 시 POST, PATCH 등을 GET처럼 파라미티 인자를 받는 형식으로 운영하지 못하고 있음, 학습을 통해 이 부분에 대한 개선이 필요함
+~~ - Swagger 활용 미숙 ~~
+  ~~ - Swagger를 활용한 api docs 운영 시 POST, PATCH 등을 GET처럼 파라미티 인자를 받는 형식으로 운영하지 못하고 있음, 학습을 통해 이 부분에 대한 개선이 필요함 ~~
 
 -----
 
