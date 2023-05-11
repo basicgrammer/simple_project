@@ -24,7 +24,7 @@
 
 - Deploy
 
-  ![On-Premise](https://img.shields.io/badge/On--Premise-Infra-blue)
+  ![On-Premise](https://img.shields.io/badge/On--Premise-Infra-blue)</br>
   ![Docker](https://img.shields.io/badge/Docker-Container-brightgreen)
   ![docker-compose](https://img.shields.io/badge/docker--compose-Orchestra%20Tool-orange)
   ![Gunicorn](https://img.shields.io/badge/Gunicorn-App%20Server-red)
