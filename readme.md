@@ -44,8 +44,9 @@
   ![docker-compose](https://img.shields.io/badge/docker--compose-Orchestra%20Tool-orange)</br>
   ![Gunicorn](https://img.shields.io/badge/Gunicorn-App%20Server-red)</br>
 
+-----
 
-#### 개발 사양
+### 개발 사양
 
 ```text
 - OS : Ubuntu 22.04 LTS (XenServer 가상화 기반 VM)
@@ -57,12 +58,14 @@
 ```
 -----
 
-#### 참고사항
+### 참고사항
 ```text
 - 원활한 테스트를 위해서 Django SECRET_KEY 및 각종 설정들에 대한 참조 파일을 함께 업로드했습니다..
 - 구동 테스트 시 docker 및 docker-compose가 필요합니다. / OS 및 환경은 관계 없습니다.
 ```
 ----
+
+### Command 명령어 리스트
 
 #### 컨테이너 기동
 
@@ -154,8 +157,7 @@ jamo
 django-ninja-jwt
 six
 ```
-
-
+-----
 
 ### 고려사항
 
