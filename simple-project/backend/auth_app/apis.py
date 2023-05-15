@@ -26,6 +26,10 @@ class Created(Schema) :
 class Message(Schema) :
     message : dict
 
+## Code 401
+class Expired(Schema) :
+    message : dict
+
 # ## Code 500
 # class ServerMessage(Schema) :
 #     res_data : str
@@ -47,6 +51,11 @@ class SignInUserData(Schema) :
 
 class SignOutUserData(Schema) :
     userid : str
+
+class CreateToken(Schema) :
+
+    userid : str
+    refresh_token : str
 
 
 ## ====> 회원가입 API 
@@ -84,7 +93,7 @@ def sign_in(request, data : SignInUserData) :
 
 
 ## 로그아웃
-@router.post('/sign-out', response={200: Success, 500: Message})
+@router.post('/sign-out', auth=None, response={200: Success, 500: Message})
 @transaction.atomic
 def sign_out(request, data : SignOutUserData) :
 
@@ -100,18 +109,23 @@ def sign_out(request, data : SignOutUserData) :
 
 
 ## 신규 Access Token 발급
-@router.post('/get-new-token', auth=None, response={200 : Success, 400 : Message, 500 : Message})
-def get_access_token(request) :
+@router.post('/get-new-token', auth=None, response={200 : Success, 400 : Message, 401 : Expired, 500 : Message, })
+def get_access_token(request, data : CreateToken) :
 
-    user_data = json.loads(request.body)
 
-    res_code, message, token_data = AuthService.get_new_acces_token(user_data['user_id'], user_data['refreshToken'])
+    user_data = data.dict()
+    # user_data = json.loads(request.body)
+
+    print(user_data)
+
+    res_code, message, payload = AuthService.create_access_token(user_data)
 
 
     res_message = {
         "message": message,
-        "accessToken": token_data['access'],
-        "refreshToken": token_data['refresh']
+        "payload": payload
+        # "accessToken": token_data['access'],
+        # "refreshToken": token_data['refresh']
     }
 
     return res_code, {'message' : res_message}

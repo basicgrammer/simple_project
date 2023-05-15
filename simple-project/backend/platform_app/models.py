@@ -1,8 +1,10 @@
 from django.db import models
+from auth_app.models import *
 
 class Product(models.Model) :
 
     p_pk_id = models.AutoField(primary_key = True, verbose_name = "기본키(자동 증가)")
+    fk_key = models.ForeignKey(Profile, on_delete = models.CASCADE, verbose_name = "외래키 : 자동 할당 번호 (Profile)",db_column = "fk_key")
 
     ## 카테고리가 정해져있다는 가정하에 CHOCIES를 사용함
     CATEGORY_CHOICES = [

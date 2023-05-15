@@ -6,12 +6,13 @@ from django.db import transaction
 from django.conf import settings
 
 from ninja_jwt.tokens import RefreshToken
+import inspect
 
 
 class AuthService :
-    @transaction.atomic
-    def insert_user_data(user_data:dict) -> "Response Code":
 
+
+    def insert_user_data(user_data:dict) -> "Response Code":
         
         try : 
             # print(user_data)
@@ -20,9 +21,11 @@ class AuthService :
             pw_check = user_data['userpw']
             pw_check_pair = user_data['userpw2']
 
-            # print("--check")
+            ## 휴대폰 전화번호 입력이 잘못되어있는 경우 롤백 처리를 해줘야함
+            ## ex) 010-888-234
 
-            # print(user_phone)
+            ## 입력을 무조건 -를 포함한 입력을 받아야함
+            
 
             ## 휴대폰 번호 저장 필드에서는 - 를 제거하고 저장하는 것이 검색 등의 여러 방법을 고려할때 좋은 방법 생각함
             convert_phone_num = user_phone.replace("-", "")
@@ -115,6 +118,13 @@ class AuthService :
             ## 로그아웃 처리되므로 refresh 토큰 자체가 제거된다.
             query_set2 = Token.objects.get(relation_id = query_set.profile_pk_id)
 
+            # if query_set2.refresh_token != '' :
+
+            #     ## refresh_token이 존재한다면 토큰 유효성 검사를 진행해야하나?
+
+            
+            # else :
+
             ## 리프레시 토큰 초기화 처리
             query_set2.refresh_token = ''
 
@@ -129,14 +139,14 @@ class AuthService :
             message = "서비스 기능에 문제가 발생했습니다."
             return 500, message
 
-    def get_jwt_token(user_id:str) -> "JWT Token Info" :
-
-        # print(user_id)
+    def get_jwt_token(user_id:str) -> "Payload" :
 
         profile = Profile.objects.get(user_id = user_id)
         token = Token.objects.get(relation_id = profile.profile_pk_id)
 
         refresh_token = RefreshToken.for_user(profile)
+
+        
 
         token.refresh_token = refresh_token
         token.save()
@@ -162,7 +172,9 @@ class AuthService :
     # def new_access_token(refresh_token:bytes) -> "JWT Access Token" :
 
     #     return accessToken
-    def get_new_acces_token(user_id:str, refresh_token:bytes) -> "JWT Access Token" :
+    def create_access_token(parser_data : dict) -> "JWT Access Token" :
+
+
         
         try :
 
@@ -171,21 +183,23 @@ class AuthService :
             # 2. refresh Token DB 대조
             # 3. access Token 발급
 
-            profile = Profile.objects.get(user_id = user_id)
+            token_validation_check = jwt.decode(str(parser_data['refresh_token']), settings.SECRET_KEY, algorithms=["HS256"])
+
+            profile = Profile.objects.get(user_id = parser_data['userid'])
             token = Token.objects.get(relation_id = profile.profile_pk_id)
 
-            if token.refresh_token == refresh_token :
+            if token.refresh_token == parser_data['refresh_token'] :
 
                 refresh_token = RefreshToken.for_user(profile)
 
-                token.refresh_token = refresh_token
-                token.save()
-
                 access_token = refresh_token.access_token
 
-                decode = jwt.decode(str(access_token), settings.SECRET_KEY, algorithms=["HS256"])
+                print(access_token)
 
-                decode['user_id'] = user_id
+                decode = jwt.decode(str(access_token), settings.SECRET_KEY, algorithms=["HS256"])
+                
+
+                decode['user_id'] = parser_data['userid']
                 decode['access'] = "authuser"
 
                 encoded = jwt.encode(decode, settings.SECRET_KEY, algorithm="HS256")
@@ -207,17 +221,30 @@ class AuthService :
                     'access': None
                 }
                 res_code = 400
-                message = "계정이 로그아웃 되었습니다. 다시 로그인해주세요."
+                message = "해당 기능을 수행할 수 없습니다."
 
                 return res_code, message, token_data
 
-        except  :
+        except jwt.ExpiredSignatureError : 
+            
+            ## 토큰 Expired Error가 발생하는 경우,  2가지 처리를 해야함.
+
+            ## 1. 유저에게 연결된 refresh_token 저장 삭제 
+            ## 2. 응답 메시지 반환
+
+            print("토큰 Expired Check")
+
+            profile = Profile.objects.get(user_id = parser_data['userid'])
+            token = Token.objects.get(relation_id = profile.profile_pk_id)
+
+            token.refresh_token = ""
+            token.save()
             
             token_data = {
                 'refresh': None,
                 'access': None
             }
-            res_code = 400
+            res_code = 401
             message = "계정이 로그아웃 되었습니다. 다시 로그인해주세요."
 
             return res_code, message, token_data

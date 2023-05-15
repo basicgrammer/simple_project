@@ -2,7 +2,7 @@ import bcrypt
 
 class CryptService :
 
-    def pw_crypt(pw_check:str) -> str:
+    def pw_crypt(pw_check : str) -> str:
 
 
         ## 솔트 랜덤 생성 // byte
@@ -19,4 +19,14 @@ class CryptService :
         decode_hashed_pw = hashed_pw.decode('utf-8')
 
         return decode_hashed_pw
+
+
+    # ## Access Token 단독 발급이 존재하지 않았기 때문에, 신규 발급 진행
+    # def create_access_toke_only(user_id : str) -> "Access Token" :
+
+
+
+    #     return acces_token
+
+
 

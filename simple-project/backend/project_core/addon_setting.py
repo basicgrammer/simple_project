@@ -18,7 +18,7 @@ DATABASES = {
 NINJA_JWT = {
     ## 임시로 엑세스 토큰 LIFETIME을 120분으로 조종함
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=3),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,

@@ -6,10 +6,14 @@ from django.db import models
 class Profile(models.Model) :
 
     profile_pk_id = models.AutoField(primary_key = True, verbose_name = "기본키(자동 증가)")
-    user_id = models.CharField(max_length = 128, default = '', null = False, verbose_name = "유저 ID (휴대폰 번호 사용)")
+    user_id = models.CharField(max_length = 64, default = '', null = False, verbose_name = "유저 ID (휴대폰 번호 사용)")
+
     user_pw = models.CharField(max_length = 256, default = '', null = False, verbose_name = "유저 PW (암호화 저장 - 단방향 해시)")
     # user_nickname = models.CharField(max_length = 200, default = '', null = False, verbose_name = "유저 닉네임") ## 초기 닉네임은 user_id와 동일하게 구성
+    # phone_num = models.CharField(max_length = 30, default = '', null = False, verbose_name = "유저 휴대폰 번호 : 유저 ID와 동일하게 사용")
     phone_num = models.CharField(max_length = 30, default = '', null = False, verbose_name = "유저 휴대폰 번호 : 유저 ID와 동일하게 사용")
+    # phone_num_middle = models.CharField(max_length = 30, default = '', null = False, verbose_name = "유저 휴대폰 번호 : 유저 ID와 동일하게 사용")
+    # phone_num_last = models.CharField(max_length = 30, default = '', null = False, verbose_name = "유저 휴대폰 번호 : 유저 ID와 동일하게 사용")
     ## refresh_token 정보가 없는 경우 해당 유저는 로그인 되지 않은것으로 판단하면 됨
     # refresh_token = models.CharField(max_length = 256, default = '', null = False, verbose_name = "유저에게 할당된 refresh_token")
     last_login = models.DateTimeField(null = True, verbose_name  = "마지막 로그인 날짜")

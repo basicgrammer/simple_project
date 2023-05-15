@@ -1,13 +1,14 @@
 from ..models import *
 from django.utils import timezone
 from jamo import h2j, j2hcj
+from auth_app.models import Profile
 
 
 class PlatService :
 
     def insert_item_data(product_data:dict) -> "Response Code, Message" :
 
-        p_query_set = Product.objects.filter(p_name = product_data['p_name'], p_delete_check = False)
+        p_query_set = Product.objects.filter(p_name = product_data['p_name'], p_barcode = product_data['barcode'], p_delete_check = False)
 
         try : 
 
@@ -28,6 +29,7 @@ class PlatService :
 
                 query_set = Product()
                 query_set.p_regi_user = product_data['userid']
+                query_set.fk_key = Profile.objects.get(user_id = product_data['userid'])
                 query_set.p_category = product_data['category']
                 query_set.p_price = product_data['price']
                 query_set.p_cost = product_data['cost']
@@ -135,17 +137,32 @@ class PlatService :
             return 500, message
 
     
-    def get_item_list(user_id:str, cursor:int) -> "Response Code, Message, Item Data List" :
+    def get_item_list(userid : str, cursor : int) -> "Response Code, Message, Item Data List" :
         
+
+        # print(parser_data)
+
         if cursor != None: 
         
             ## Cursor 값이 존재하므로, Cursor값부터 10개까지 슬라이스 처리를 통해 반환
-            query_set = Product.objects.filter(p_pk_id__gte = cursor, p_regi_user = user_id, p_delete_check = False).order_by('p_pk_id')[:10].values()
+            query_set = Product.objects.filter(p_pk_id__gte = cursor, p_regi_user = userid, p_delete_check = False).order_by('p_pk_id')[:10].values()
 
         else : 
 
             ## Cursor 즉 마지막 값이 None인 경우 처음부터 10개까지 슬라이스 처리를 통해 반환
-            query_set = Product.objects.filter(p_regi_user = user_id, p_delete_check = False).order_by('p_pk_id')[:10].values()
+            query_set = Product.objects.filter(p_regi_user = userid, p_delete_check = False).order_by('p_pk_id')[:10].values()
+            test_query_set = Product.objects.select_related('fk_key').all()
+            # test_query_set = Product.objects.all().values()
+
+            for index in test_query_set :
+
+                # print(item.p_pk_id)
+                # print(item.values())
+                # print(index)
+
+                print("Excute Query")
+
+                print(index.fk_key.user_pw)
 
         n_query_set = list(query_set) ## 프론트 반환 시 파싱에 문제가 없도록 list로 묶음 처리
 

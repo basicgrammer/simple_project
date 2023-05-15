@@ -66,12 +66,16 @@ class DeleteItem(Schema) :
     p_name : str
     barcode : str
 
+class GetItemList(Schema) :
+    userid : str
+    cursor : int = None
+
 '''
 ## 상품 등록 API 
 '''
 # @router.post('/regi-item', auth=None, response={200: Success, 400: Error})
 # auth=None이 추가되는 경우 urls.py의 GlobalAuth()를 거치지 않는다. 
-@router.post('/regi-item', response={200:Success, 201:Created, 400:Error, 500:ServerError})
+@router.post('/regi-item', auth=None, response={200:Success, 201:Created, 400:Error, 500:ServerError})
 @transaction.atomic
 def regi_item(request, data : RegiItem) :
 
@@ -160,16 +164,18 @@ def delete_info_item(request) :
 ## 본인이 등록한 상품의 등록 리스트 및 상세 정보 호출 API
 '''
 
-@router.get('/list-item', response={200: Success, 400: Error})
-def list_time(request, user_id:str, cursor:int=None) :
+@router.get('/list-item', auth=None, response={200: Success, 400: Error})
+def list_time(request, userid:str, cursor:int=None) :
+
+    print(userid)
 
     ## Cursor 기반 페이지네이션을  구현하는데, 1페이지 기준 10개의 상품 구현 
     ## auto increment로 설정된 primary키를 활용해서 cursor based pagination을 구현함
 
-    print(user_id)
-    
+    # print(userid)
+    # print(cursor)
 
-    res_code, res_message, item_data = PlatService.get_item_list(user_id, cursor)
+    res_code, res_message, item_data = PlatService.get_item_list(userid, cursor)
     
     message = {
 
