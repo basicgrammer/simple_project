@@ -11,7 +11,7 @@ router = Router()
 
 
 '''
-## API 반환 정보 설정
+## API 응답 스키마
 ## API의 응답값을 수정하려면 이곳에서 수정하시면 됩니다.
 '''
 
@@ -33,7 +33,7 @@ class ServerError(Schema) :
     message: dict
 
 '''
-## API 입력 템플릿 수정
+## API 입력 스키마 수정
 ## Swagger에서 입력값 예시에 해당하는 값을 여기서 등록합니다.
 '''
 

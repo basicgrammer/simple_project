@@ -3,11 +3,7 @@ from django.test import TestCase
 # Create your tests here.
 from jamo import h2j, j2hcj
 
-
-
 origin_keyword = "슈크림라떼21"
-
-
 
 def create_keyword(origin_keyword:str) -> "keyword" :
 

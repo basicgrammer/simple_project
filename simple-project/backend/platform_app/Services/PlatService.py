@@ -140,38 +140,49 @@ class PlatService :
     def get_item_list(userid : str, cursor : int) -> "Response Code, Message, Item Data List" :
         
 
-        # print(parser_data)
+        ## .get()으로 처리하는 경우 데이터가 없을 때 오류가 발생하기 때문에, get_or_404 방법도 있지만 여기에서는 활용하지 않기로 선택함
+        user_query_set = Profile.objects.filter(user_id = userid) 
 
-        if cursor != None: 
-        
-            ## Cursor 값이 존재하므로, Cursor값부터 10개까지 슬라이스 처리를 통해 반환
-            query_set = Product.objects.filter(p_pk_id__gte = cursor, p_regi_user = userid, p_delete_check = False).order_by('p_pk_id')[:10].values()
+        if user_query_set.exists() :
 
-        else : 
+            user_data = user_query_set[0].profile_pk_id
 
-            ## Cursor 즉 마지막 값이 None인 경우 처음부터 10개까지 슬라이스 처리를 통해 반환
-            query_set = Product.objects.filter(p_regi_user = userid, p_delete_check = False).order_by('p_pk_id')[:10].values()
-            test_query_set = Product.objects.select_related('fk_key').all()
-            # test_query_set = Product.objects.all().values()
-
-            for index in test_query_set :
-
-                # print(item.p_pk_id)
-                # print(item.values())
-                # print(index)
-
-                print("Excute Query")
-
-                print(index.fk_key.user_pw)
-
-        n_query_set = list(query_set) ## 프론트 반환 시 파싱에 문제가 없도록 list로 묶음 처리
-
-        if query_set.exists() :
             
-            messages = "상품 리스트 정보입니다."
-            return 200, messages, n_query_set
+            if cursor != None: 
+           
+                ## Cursor 값이 존재하므로, Cursor값부터 10개까지 슬라이스 처리를 통해 반환
+                query_set = Product.objects.filter(p_pk_id__gte = cursor, fk_key = user_data, p_delete_check = False).order_by('p_pk_id')[:10].values()
 
-        else :  
+            else : 
+
+                ## Cursor 즉 마지막 값이 None인 경우 처음부터 10개까지 슬라이스 처리를 통해 반환
+                query_set = Product.objects.filter(fk_key = user_data, p_delete_check = False).order_by('p_pk_id')[:10].values()
+
+                # ------------- N + 1 문제 해결을 위한 select_related()
+                # test_query_set = Product.objects.select_related('fk_key').all()
+                # test_query_set = Product.objects.all().values()
+
+                # for index in test_query_set :
+
+                #     print("Excute Query")
+
+                #     print(index.fk_key.user_pw)
+                # -------------------- END -------------------------
+
+            n_query_set = list(query_set) ## 프론트 반환 시 파싱에 문제가 없도록 list로 묶음 처리
+
+            if query_set.exists() :
+                
+                messages = "상품 리스트 정보입니다."
+                return 200, messages, n_query_set
+
+            else :  
+
+                temp_query_set = None
+                messages = "등록된 상품 리스트 정보가 없습니다."
+                return 400, messages, temp_query_set
+        
+        else :
 
             temp_query_set = None
             messages = "등록된 상품 리스트 정보가 없습니다."
